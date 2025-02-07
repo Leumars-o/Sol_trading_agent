@@ -62,4 +62,6 @@ class Config:
         "chainId": (os.getenv("CHAIN_ID", "solana")),
         "url": "https://api.dexscreener.com/latest/tokens/",
         "dex_pair_filter": os.getenv("DEX_PAIR_FILTER", "raydium"), # filter for Raydium pairs
+        "fetch_max_tries": int(os.getenv("DEXSCREENER_FETCH_MAX_TRIES", 10)),
+        "fetch_retry_delay": int(os.getenv("DEXSCREENER_FETCH_RETRY_DELAY", 5)), # in seconds
     }
