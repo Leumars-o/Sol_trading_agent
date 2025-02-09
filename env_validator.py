@@ -13,9 +13,9 @@ def validate_environment() -> None:
 
     missing = []
 
-    if not Config.HELIUS_WS_URL:
+    if not Config.HELIUS_WS_URI:
         missing.append("HELIUS_WS_URI")
-    if not Config.HELIUS_HTTPS_URL:
+    if not Config.HELIUS_HTTPS_URI_TX:
         missing.append("HELIUS_HTTPS_URI_TX")
     if not Config.TELEGRAM_BOT_TOKEN:
         missing.append("TELEGRAM_BOT_TOKEN")
