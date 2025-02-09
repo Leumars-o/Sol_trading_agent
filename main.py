@@ -35,6 +35,7 @@ def on_open(ws):
         ws (websocket.WebSocketApp): The websocket object.
 
     """
+
     print("Websocket Connection to Raydium Successful")
     request = {
         "jsonrpc": "2.0",
@@ -42,11 +43,9 @@ def on_open(ws):
         "method": "logsSubscribe",
         "params": [
             {
-                "mentions": [Config.LIQUIDITY_POOL["raydium_program_id"]],
+                "mentions": ["675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8"],
             },
-            {
-                "commitment": "processed",
-            }
+            {"commitment": "confirmed",}
         ]
     }
 
@@ -66,8 +65,13 @@ def on_message(ws, message):
 
     try:
         parsed = json.loads(message)
+        # print("Received message:", parsed)
         if "result" in parsed and not parsed.get("error"):
             print("Subscription confirmed. Waiting for new liquidity pools...")
+            return
+        
+        if parsed.get("error"):
+            print("RPC Error:", parsed["error"])
             return
         
         val = parsed.get("params", {}).get("result", {}).get("value", {})
@@ -75,6 +79,7 @@ def on_message(ws, message):
         signature = val.get("signature", "")
 
         if not logs or not signature:
+            print("No logs or signature found in message.")
             return
         
         # Loop through logs to find new liquidity pool creation
@@ -83,6 +88,7 @@ def on_message(ws, message):
             for log in logs if isinstance(log, str)
         )
         if not found_initialize:
+            # print("No initialize2 log found in message.")
             return
         
         process_transaction(signature)
@@ -99,7 +105,7 @@ def on_error(ws, error):
         ws (websocket.WebSocketApp): The websocket object.
         error (_type_): _description_
     """
-    return ""
+    print(f"Websocket Error: {error}")
 
 def on_close(ws, close_status_code, close_msg):
     """on_close
@@ -138,7 +144,7 @@ def process_transaction(signature: str):
         print("❌ Transaction details not found. Looking for new tokens...")
         return
     
-    token_mint = tx_data.get("token_mint")
+    token_mint = tx_data.get("tokenMint")
     if not token_mint:
         print("❌ Incomplete transaction data. Skipping...\n")
         return
@@ -157,19 +163,18 @@ def process_transaction(signature: str):
     
     # Print in processed format
     print("[ Token Information ]")
-    print(f"{ds_info['socialsIcon']} This token has {ds_info['socialLenght']} socials.")
+    print(f"{ds_info['socialsIcon']} This token has {ds_info['socialLength']} socials.")
     print(f"👀 View on Dex https://descreener.com/{Config.DEXSCREENER['chainId']}/{token_mint}")
+    print(f"🔗 Buy via SudoBot https://t.me/SudoCatBot?start=ref_cBVzFkKXms-{token_mint}")
     print(
         f"🕒 This token pair was created {ds_info['timeAgo']} and has "
-        f"{ds_info['pairsAvailable']} pairs available including {ds_info['dexPairn']}"
+        f"{ds_info['pairsAvailable']} pair available"
     )
     print(f"💹 Current Price: ${ds_info['currentPrice']}")
     print(f"📦 Current Mkt Cap: ${ds_info['marketCap']}")
     print(f"💦 Current Liquidity: ${ds_info['liquidity']}")
-    print(f"🚀 Pumpfun token: {ds_info['pumpfunIcom']} {ds_info['isPumpFun']}")
+    print(f"🚀 Pumpfun token: {ds_info['pumpfunIcon']} {ds_info['isPumpFun']}")
     print(f"📛 Token Name: {ds_info['tokenName']} Symbol: {ds_info['tokenSymbol']}")
-    print(f"🔗 Token Address: {ds_info['tokenAddress']}")
-    print(f"📈 Chart: {ds_info['chart']}")
     print(f"---------------------------------------------\n")
 
     
@@ -177,18 +182,15 @@ def process_transaction(signature: str):
     msg = (
         "<b>[ Token Information ]</b>\n"
         f"🚀 New Liquidity Pool detected on Raydium\n"
-        f"{ds_info['socialsIcon']} This token has {ds_info['socialLenght']} socials.\n"
-        f"🔗 Token Address: {ds_info['tokenAddress']}\n"
+        f"{ds_info['socialsIcon']} This token has {ds_info['socialLength']} socials.\n"        
         f"📛 Token Name: {ds_info['tokenName']} Symbol: {ds_info['tokenSymbol']}\n"
-        f"📈 Chart: {ds_info['chart']}\n"
         f"💹 Current Price: ${ds_info['currentPrice']}\n"
         f"📦 Current Mkt Cap: ${ds_info['marketCap']}\n"
         f"💦 Current Liquidity: ${ds_info['liquidity']}\n"
-        f"🚀 Pumpfun token: {ds_info['pumpfunIcom']} {ds_info['isPumpFun']}\n"
+        f"🚀 Pumpfun token: {ds_info['pumpfunIcon']} {ds_info['isPumpFun']}\n"
         f"👀 View on Dex https://descreener.com/{Config.DEXSCREENER['chainId']}/{token_mint}\n"
-        f"🕒 This token pair was created {ds_info['timeAgo']} and has {ds_info['pairsAvailable']} pairs available including {ds_info['dexPairn']}\n"
-        f"🔗 Token Address: {ds_info['tokenAddress']}\n"
-        f"📈 Chart: {ds_info['chart']}\n"
+        f"🕒 This token pair was created {ds_info['timeAgo']} and has {ds_info['pairsAvailable']} pairs available\n"
+        f"🔗 Buy via SudoBot https://t.me/SudoCatBot?start=ref_cBVzFkKXms-{token_mint}\n"
         f"---------------------------------------------\n"
     )
 
@@ -206,13 +208,12 @@ def run_websocket():
     This function initializes the websocket connection to Raydium.
     """
     ws = websocket.WebSocketApp(
-        Config.LIQUIDITY_POOL["raydium_ws_url"],
+        Config.HELIUS_WS_URI,
         on_open=on_open,
         on_message=on_message,
         on_error=on_error,
         on_close=on_close,
     )
-
     ws.run_forever()
 
 if __name__ == "__main__":
