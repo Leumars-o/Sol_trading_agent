@@ -153,6 +153,15 @@ def process_transaction(signature: str):
         print("❌ Rug check failed. Skipping token...\n")
         return
     
+    # Send initial message to Telegram
+    print("📩 Sending token purchase link to Telegram...")
+    send_telegram_message(
+        f"🚀 New Liquidity Pool detected\n"
+        f"👀 View on Bird eye https://www.birdeye.so/token/{token_mint}?chain=solana\n"
+        f"🔗 Buy via SudoBot https://t.me/SudoCatBot?start=ref_cBVzFkKXms-{token_mint}"
+    )
+    print("📩 Telegram message sent...")
+    
     print("⏳ Waiting 30 seconds for DexScreener to update token info...")
     time.sleep(30)
 
@@ -164,7 +173,7 @@ def process_transaction(signature: str):
     # Print in processed format
     print("[ Token Information ]")
     print(f"{ds_info['socialsIcon']} This token has {ds_info['socialLength']} socials.")
-    print(f"👀 View on Dex https://descreener.com/{Config.DEXSCREENER['chainId']}/{token_mint}")
+    print(f"👀 View on Dex https://dexscreener.com/{Config.DEXSCREENER['chainId']}/{token_mint}")
     print(f"🔗 Buy via SudoBot https://t.me/SudoCatBot?start=ref_cBVzFkKXms-{token_mint}")
     print(
         f"🕒 This token pair was created {ds_info['timeAgo']} and has "
@@ -188,7 +197,7 @@ def process_transaction(signature: str):
         f"📦 Current Mkt Cap: ${ds_info['marketCap']}\n"
         f"💦 Current Liquidity: ${ds_info['liquidity']}\n"
         f"🚀 Pumpfun token: {ds_info['pumpfunIcon']} {ds_info['isPumpFun']}\n"
-        f"👀 View on Dex https://descreener.com/{Config.DEXSCREENER['chainId']}/{token_mint}\n"
+        f"👀 View on Dex https://dexscreener.com/{Config.DEXSCREENER['chainId']}/{token_mint}\n"
         f"🕒 This token pair was created {ds_info['timeAgo']} and has {ds_info['pairsAvailable']} pairs available\n"
         f"🔗 Buy via SudoBot https://t.me/SudoCatBot?start=ref_cBVzFkKXms-{token_mint}\n"
         f"---------------------------------------------\n"
