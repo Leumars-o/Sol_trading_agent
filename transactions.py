@@ -179,7 +179,7 @@ def get_rug_check_confirmed(token_mint: str) -> bool:
         return True
     
 
-def fetch_dexscreener_token_details(token_mint: str) -> Union[dict, None]:
+def fetch_dexscreener_token_details(token_mint: str, skip_check=False) -> Union[dict, None]:
     """Fetch token details from Dexscreener.
 
     Args:
@@ -219,10 +219,10 @@ def fetch_dexscreener_token_details(token_mint: str) -> Union[dict, None]:
 
             print("====================================\n")
             print(f"new data: {matched_pair}")
-            print(matched_pair.get("dexId") == dex_pair_filter)
-
+                
             if matched_pair.get("dexId") != dex_pair_filter:
-                raise ValueError(f"No {dex_pair_filter} pair found in Dexscreener data.")
+                if not skip_check:
+                    raise ValueError(f"No {dex_pair_filter} pair found in Dexscreener data.")
             
             base_token = matched_pair.get("baseToken", {})
             token_name = base_token.get("name", token_mint)
@@ -248,8 +248,6 @@ def fetch_dexscreener_token_details(token_mint: str) -> Union[dict, None]:
 
             # Socials
             info_obj = matched_pair.get("info", {})
-            if info_obj:
-                print("i got the info obj")
             socials = info_obj.get("socials", [])
             social_length = len(socials)
             print(social_length)
@@ -269,6 +267,7 @@ def fetch_dexscreener_token_details(token_mint: str) -> Union[dict, None]:
                 "pairsAvailable": len(data),
                 "socialsIcon": social_icon,
             }
+    
         except Exception as e:
             print(f"Specific error: {str(e)}") 
             if attempt < max_retries:
