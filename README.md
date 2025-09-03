@@ -187,6 +187,23 @@ docker-compose logs -f analyzer
 docker-compose ps
 ```
 
+##  Future Improvements
+
+### Planned Features
+- **KOL CA Shilling Monitor**: Real-time monitoring of Key Opinion Leaders (KOLs) and influencers on X (Twitter) for token contract address (CA) mentions and shilling activities
+- **Social Media Sniping**: Automated token discovery and analysis based on KOL tweets, crypto influencer posts, and trending token mentions on X
+- **Sentiment Analysis**: Advanced social sentiment tracking from multiple platforms to gauge token popularity and potential price movements
+- **Smart Contract Integration**: Direct integration with Solana wallets for automated token purchases based on AI analysis scores
+- **Portfolio Management**: Track and manage token positions with profit/loss monitoring
+- **Advanced Filtering**: Machine learning-based filtering to identify high-potential tokens before they trend
+
+### Technical Enhancements
+- **X API Integration**: Real-time tweet monitoring and analysis
+- **Multi-chain Support**: Expand beyond Solana to Ethereum, BSC, and other chains
+- **Enhanced AI Models**: Integration with multiple AI providers for comprehensive analysis
+- **Mobile App**: Native mobile application for iOS and Android
+- **Web Dashboard**: Real-time web interface for monitoring and management
+
 ##  Contributing
 
 1. Fork the repository
