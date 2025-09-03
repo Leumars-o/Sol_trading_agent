@@ -1,5 +1,7 @@
 requests
 websocket-client
+google-generativeai
+grpcio
 arrow
 python-dotenv
-telegram
+python-telegram-bot
