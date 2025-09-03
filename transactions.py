@@ -201,6 +201,7 @@ def fetch_dexscreener_token_details(token_mint: str, skip_check=False) -> Union[
     final_url = f"{dex_base_url}{chain_id}/{token_mint}"
 
     max_retries = Config.DEXSCREENER["fetch_max_tries"]
+    max_token_time = Config.RUG_CHECK["max_created_at"]
 
     for attempt in range(1, max_retries + 1):
         print(f"Attempt {attempt} of {max_retries} to fetch token details...")
@@ -234,7 +235,13 @@ def fetch_dexscreener_token_details(token_mint: str, skip_check=False) -> Union[
 
             # Calculate time ago
             if pair_created_at > 0:
+                # initial_check = True
+                # if pair_created_at > max_token_time * 1000 and initial_check:
+                #     print("token was created more than 60 seconds ago")
+                #     return None
+                # initial_check = False
                 time_ago = arrow.get(pair_created_at / 1000).humanize()
+
             else:
                 time_ago = "N/A"
             
