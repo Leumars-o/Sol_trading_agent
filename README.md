@@ -3,7 +3,8 @@
 A comprehensive Solana token analysis and monitoring system with real-time liquidity pool detection and AI-powered token evaluation via Telegram.
 
 <img width="805" height="475" alt="The Africa Hack 1.0 hackathon winner" src="https://github.com/user-attachments/assets/2c9f7c17-d4dd-447e-b2ca-dc19ba715476" />
-**The Africa Hack 1.0 AI Trading Agents hackathon winner!**
+
+#### **The Africa Hack 1.0 AI Trading Agents hackathon winner!**
 
 ## 🚀 Features
 
