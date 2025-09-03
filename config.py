@@ -53,9 +53,10 @@ class Config:
         "min_total_markets": int(os.getenv("RUG_CHECK_MIN_TOTAL_MARKETS", 10)),
         "min_total_lp_providers": int(os.getenv("RUG_CHECK_MIN_TOTAL_LP_PROVIDERS", 5)),
         "min_total_market_liquidity": int(os.getenv("RUG_CHECK_MIN_TOTAL_MARKET_LIQUIDITY", 20000)),
-        "ignore_pump_fun": os.getenv("RUG_CHECK_IGNORE_PUMP_FUN", "False"),
+        "ignore_pump_fun": os.getenv("RUG_CHECK_IGNORE_PUMP_FUN", "True"),
         "max_score": int(os.getenv("RUG_CHECK_MAX_SCORE", 0)), # 0 means no max score
-        "legacy_not_allowed": os.getenv("RUG_CHECK_LEGACY_NOT_ALLOWED", ["Copycat token",],)
+        "legacy_not_allowed": os.getenv("RUG_CHECK_LEGACY_NOT_ALLOWED", ["Copycat token",],),
+        "max_created_at": int(os.getenv("RUG_CHECK_MAX_CREATED_AT", 60)), # in seconds
     }
 
     # Dexscreener Config
